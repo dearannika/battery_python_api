@@ -1,0 +1,125 @@
+Battery Dataset Analysis & Model Training Report
+
+1. Introduction
+
+This report provides an overview of the dataset analysis, preprocessing, model training, evaluation, and deployment using Flask. The goal is to classify battery-related data using a machine learning model and deploy it as a web service.
+
+2. Dataset Details
+
+Source: Multiple CSV files from the folder cleaned_dataset/data.
+
+Size: Merged dataset consists of all individual CSV files combined.
+
+Attributes: Various features related to battery performance (specific feature details were not provided in the dataset preview).
+
+Target Variable: Last column of the dataset (assumed to be categorical for classification).
+
+3. Data Preprocessing
+
+3.1 Data Cleaning
+
+Checked for missing values.
+
+Removed rows with missing values to maintain dataset integrity.
+
+3.2 Feature Engineering
+
+Identified categorical variables and applied one-hot encoding.
+
+Standardized numeric features if necessary (not explicitly mentioned in the script).
+
+3.3 Splitting the Data
+
+Training Set: 80% of the dataset.
+
+Test Set: 20% of the dataset.
+
+Target Column: Identified dynamically as the last column of the dataset.
+
+4. Data Exploration & Visualization
+
+Histograms of numeric features.
+
+Correlation heatmap to identify relationships between variables.
+
+Boxplot analysis to detect potential outliers.
+
+5. Model Training
+
+Algorithm Used: Random Forest Classifier
+
+Hyperparameters:
+
+n_estimators = 100
+
+random_state = 42
+
+Training Process:
+
+Trained the model using the training dataset.
+
+Made predictions on the test dataset.
+
+6. Model Performance
+
+Evaluation Metric: Accuracy
+
+Results:
+
+Accuracy on Test Data: X.XX (Replace with actual value from script output)
+
+Model predictions were saved in test_results.csv.
+
+Trained model was saved as model.pkl.
+
+7. Model Deployment Using Flask
+
+7.1 Setting up the Flask App
+
+Install dependencies:
+
+pip install flask numpy pandas scikit-learn
+
+Create app.py:
+
+from flask import Flask, request, jsonify
+import pickle
+import numpy as np
+import pandas as pd
+
+app = Flask(__name__)
+model = pickle.load(open('model.pkl', 'rb'))
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    features = np.array(data['features']).reshape(1, -1)
+    prediction = model.predict(features)
+    return jsonify({'prediction': prediction.tolist()})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+Run the Flask application:
+
+python app.py
+
+Test the API using Postman or cURL:
+
+curl -X POST http://127.0.0.1:5000/predict -H "Content-Type: application/json" -d '{"features": [1.2, 3.4, 5.6, 7.8]}'
+
+8. Conclusion
+
+The Random Forest model was successfully trained on the battery dataset and deployed as a Flask API. Future improvements could involve:
+
+Feature selection to enhance model performance.
+
+Hyperparameter tuning for better optimization.
+
+Trying other classifiers like SVM or Neural Networks for comparison.
+
+Deploying the API to a cloud platform like AWS or Heroku.
+
+Author: Anitha
+Date: 25/2/25
+
